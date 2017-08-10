@@ -33,7 +33,7 @@ task acceptanceTest(type: Test){
     }
 }
 
-check.dependsOn acceptanceTest
+//check.dependsOn acceptanceTest
 acceptanceTest.mustRunAfter test
 
 repositories {

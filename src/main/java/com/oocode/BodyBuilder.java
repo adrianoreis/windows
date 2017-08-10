@@ -7,7 +7,7 @@ public class BodyBuilder {
     public static RequestBody bodyBuilder(int w, int h, int n, int width, int height) {
         return new MultipartBody.Builder()
                 .setType(MultipartBody.FORM)
-                .addFormDataPart("account", "Ivan's Windows")
+                .addFormDataPart("account", "test")
                 .addFormDataPart("quantity", Integer.toString(n))
                 .addFormDataPart("width", Integer.toString(w - width))
                 .addFormDataPart("height", Integer.toString(h - height))
@@ -18,7 +18,7 @@ public class BodyBuilder {
     public static RequestBody bodyBuilder2(int w, int h, int n, int width, int height) {
         return new MultipartBody.Builder()
                 .setType(MultipartBody.FORM)
-                .addFormDataPart("account", "Ivan's Windows")
+                .addFormDataPart("account", "test")
                 .addFormDataPart("quantity", Integer.toString(n))
                 .addFormDataPart("width", Integer.toString(w - width))
                 .addFormDataPart("height", Integer.toString(h - height))
