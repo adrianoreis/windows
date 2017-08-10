@@ -12,21 +12,14 @@ class Windows {
     private String largeOrderEndPoint;
     private String smallOrderEndPoint;
 
-    public Windows() {
-        this("https://immense-fortress-19979.herokuapp.com/large-order","https://immense-fortress-19979.herokuapp.com/order");
-    }
-
-    public Windows(String largeOrderEndPoint, String smallOrderEndPoint) {
+    public Windows(String largeOrderEndPoint, String smallOrderEndPoint, String ...args) {
         this.largeOrderEndPoint = largeOrderEndPoint;
         this.smallOrderEndPoint = smallOrderEndPoint;
-    }
-
-    public String getServerMessage() {
-        return serverMessage;
+        this.args = args;
     }
 
     public Windows(String... args) {
-        this.args = args;
+        this("https://immense-fortress-19979.herokuapp.com/large-order","https://immense-fortress-19979.herokuapp.com/order", args);
     }
 
     public void invoke() throws IOException {
@@ -80,5 +73,9 @@ class Windows {
 
     protected String getLargeOrderEndPoint() {
         return largeOrderEndPoint;
+    }
+
+    public String getServerMessage() {
+        return serverMessage;
     }
 }

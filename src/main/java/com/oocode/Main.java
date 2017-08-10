@@ -7,8 +7,7 @@ public class Main {
         System.out.println(windows.getServerMessage());
     }
 
-    public static
-    int width(String r, boolean b) {
+    public static int width(String r, boolean b) {
         if (!b) return h(r, b);
         if (r.equals("Churchill")) {
             return 4;
