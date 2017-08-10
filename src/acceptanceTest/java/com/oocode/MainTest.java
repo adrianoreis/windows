@@ -12,7 +12,7 @@ public class MainTest {
     }
 
     @Test
-    public void testOrder() throws Exception {
+    public void testSmallOrder() throws Exception {
 
         Main.main(new String[]{"48", "36", "1", "Victoria"});
     }
