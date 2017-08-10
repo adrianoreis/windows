@@ -2,7 +2,9 @@ package com.oocode;
 
 public class Main {
     public static void main(String[] args) throws Exception {
-        new Windows(args).invoke();
+        Windows windows = new Windows(args);
+        windows.invoke();
+        System.out.println(windows.getServerMessage());
     }
 
     public static

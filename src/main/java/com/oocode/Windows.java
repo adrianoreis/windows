@@ -9,6 +9,12 @@ import static com.oocode.Main.*;
 class Windows {
     private String[] args;
 
+    private String serverMessage;
+
+    public String getServerMessage() {
+        return serverMessage;
+    }
+
     public Windows(String... args) {
         this.args = args;
     }
@@ -39,7 +45,7 @@ class Windows {
         try (Response response = client.newCall(request).execute()) {
             try (ResponseBody body = response.body()) {
                 assert body != null;
-                System.out.println(body.string());
+                serverMessage=body.string();
             }
         }
         return;
@@ -53,7 +59,7 @@ class Windows {
 
         try (Response response = client.newCall(request).execute()) {
             try (ResponseBody body = response.body()) {
-                assert body != null; System.out.println(body.string());
+                assert body != null; serverMessage=body.string();
             }
         }
     }
