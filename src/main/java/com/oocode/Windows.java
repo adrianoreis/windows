@@ -8,8 +8,18 @@ import static com.oocode.Main.*;
 
 class Windows {
     private String[] args;
-
     private String serverMessage;
+    private String largeOrderEndPoint;
+    private String smallOrderEndPoint;
+
+    public Windows() {
+        this("https://immense-fortress-19979.herokuapp.com/large-order","https://immense-fortress-19979.herokuapp.com/order");
+    }
+
+    public Windows(String largeOrderEndPoint, String smallOrderEndPoint) {
+        this.largeOrderEndPoint = largeOrderEndPoint;
+        this.smallOrderEndPoint = smallOrderEndPoint;
+    }
 
     public String getServerMessage() {
         return serverMessage;
@@ -37,7 +47,7 @@ class Windows {
         // the thickness of the frame
         if ((w-width) * (h-height) * n > 20000) {
             Request request = new Request.Builder()
-                    .url("https://immense-fortress-19979.herokuapp.com/large-order")
+                    .url(getLargeOrderEndPoint())
                     .method("POST", RequestBody.create(null, new byte[0]))
                     .post(requestBody)
                     .build();
@@ -52,7 +62,7 @@ class Windows {
         }
 
         Request request = new Request.Builder()
-                .url("https://immense-fortress-19979.herokuapp.com/order")
+                .url(getSmallOrderEndPoint())
                 .method("POST", RequestBody.create(null, new byte[0]))
                 .post(requestBody)
                 .build();
@@ -62,5 +72,13 @@ class Windows {
                 assert body != null; serverMessage=body.string();
             }
         }
+    }
+
+    protected String getSmallOrderEndPoint() {
+        return smallOrderEndPoint;
+    }
+
+    protected String getLargeOrderEndPoint() {
+        return largeOrderEndPoint;
     }
 }
