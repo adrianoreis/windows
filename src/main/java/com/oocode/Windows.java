@@ -3,30 +3,45 @@ package com.oocode;
 import okhttp3.*;
 
 import java.io.IOException;
+import java.io.InputStream;
+import java.util.Properties;
 
 import static com.oocode.Main.*;
 
 class Windows {
-    private String[] args;
+    private String[] windowsOptions;
     private String serverMessage;
     private String largeOrderEndPoint;
     private String smallOrderEndPoint;
+    private String account;
 
-    public Windows(String largeOrderEndPoint, String smallOrderEndPoint, String ...args) {
+    public Windows(String largeOrderEndPoint, String smallOrderEndPoint, String ...windowsOptions) {
+        initConfigurations("", largeOrderEndPoint, smallOrderEndPoint, windowsOptions);
+    }
+    private void initConfigurations(String account, String largeOrderEndPoint, String smallOrderEndPoint, String ...windowsOptions) {
+        this.windowsOptions = windowsOptions;
+        this.account = account;
         this.largeOrderEndPoint = largeOrderEndPoint;
         this.smallOrderEndPoint = smallOrderEndPoint;
-        this.args = args;
     }
 
-    public Windows(String... args) {
-        this("https://immense-fortress-19979.herokuapp.com/large-order","https://immense-fortress-19979.herokuapp.com/order", args);
+    public Windows(String... args) throws IOException {
+        Properties properties = new Properties();
+        try (InputStream is = this.getClass().getClassLoader().
+                getResourceAsStream("config.properties")) {
+            properties.load(is);
+            initConfigurations(
+                    properties.getProperty("account"),
+                    properties.getProperty("largeorderurl"),
+                    properties.getProperty("smallorderurl"), args);
+        }
     }
 
     public void invoke() throws IOException {
-        int n = Integer.parseInt(args[2]);  // the number of windows of this size
-        int w = Integer.parseInt(args[0]);  // the width of the window
-        int h = Integer.parseInt(args[1]);  // the height of the window
-        String r = args[3];                 // the model name of these windows
+        int n = Integer.parseInt(windowsOptions[2]);  // the number of windows of this size
+        int w = Integer.parseInt(windowsOptions[0]);  // the width of the window
+        int h = Integer.parseInt(windowsOptions[1]);  // the height of the window
+        String r = windowsOptions[3];                 // the model name of these windows
         OkHttpClient client = new OkHttpClient();
 
         // the thickness of the frame depends on the model of window
@@ -77,5 +92,9 @@ class Windows {
 
     public String getServerMessage() {
         return serverMessage;
+    }
+
+    public String getAccount(){
+        return account;
     }
 }
