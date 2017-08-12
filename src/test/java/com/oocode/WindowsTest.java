@@ -53,7 +53,7 @@ public class WindowsTest {
         Windows windows = new Windows();
         assertThat(windows.getLargeOrderEndPoint(), equalTo("/test-largeorder"));
         assertThat(windows.getSmallOrderEndPoint(), equalTo("/test-smallorder"));
-        assertThat(windows.getAccount(), equalTo("test"));
+        assertThat(windows.getAccount(), equalTo("unittest"));
     }
 
     @After

@@ -8,7 +8,7 @@ import java.util.Properties;
 
 import static com.oocode.Main.*;
 
-class Windows {
+public class Windows {
     private String[] windowsOptions;
     private String serverMessage;
     private String largeOrderEndPoint;
@@ -48,8 +48,8 @@ class Windows {
         int width = width(r, true);
         int height = width(r, false);
 
-        RequestBody requestBody = BodyBuilder.bodyBuilder(w, h, n, width, height);
-        if (h > 120) requestBody = BodyBuilder.bodyBuilder2(w, h, n, width, height);
+        RequestBody requestBody = BodyBuilder.bodyBuilder(w, h, n, width, height, getAccount());
+        if (h > 120) requestBody = BodyBuilder.bodyBuilder2(w, h, n, width, height, getAccount());
 
         // the glass pane is the size of the window minus allowance for
         // the thickness of the frame
