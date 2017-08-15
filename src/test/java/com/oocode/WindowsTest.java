@@ -49,6 +49,56 @@ public class WindowsTest {
     }
 
     @Test
+    public void testPlainGlassAndTotalGlassAreaGt20000() throws Exception {
+        HttpUrl url = webServer.url("/largeorder");
+        webServer.enqueue(new MockResponse().setBody(""));
+        String[] order = new String[]{"100", "120", "10", "Churchill"};
+        Windows windows = new Windows(url.toString(), "", order);
+        windows.invoke();
+        RecordedRequest request = webServer.takeRequest();
+        String body = request.getBody().readUtf8();
+        assertThat(body, stringContainsInOrder(Arrays.asList("width", "96", "height", "117", "type", "plain")));
+        //123-4 * 456-3
+    }
+
+    @Test
+    public void testToughenedGlassAreaGt18000() throws Exception {
+        HttpUrl url = webServer.url("/largeorder");
+        webServer.enqueue(new MockResponse().setBody(""));
+        String[] order = new String[]{"15", "180", "10", "Churchill"};
+        Windows windows = new Windows(url.toString(), "", order);
+        windows.invoke();
+        RecordedRequest request = webServer.takeRequest();
+        String body = request.getBody().readUtf8();
+        assertThat(body, stringContainsInOrder(Arrays.asList("width", "11", "height", "177", "type", "toughened")));
+
+    }
+
+    @Test
+    public void testToughenedGlassNotGt18000() throws Exception {
+        HttpUrl url = webServer.url("/smallorder");
+        webServer.enqueue(new MockResponse().setBody(""));
+        String[] order = new String[]{"12", "183", "10", "Victoria"};
+        Windows windows = new Windows("", url.toString(), order);
+        windows.invoke();
+        RecordedRequest request = webServer.takeRequest();
+        String body = request.getBody().readUtf8();
+        assertThat(body, stringContainsInOrder(Arrays.asList("width", "10", "height", "180", "type", "toughened")));
+    }
+
+    @Test
+    public void testPlainGlassNotGt20000() throws Exception {
+        HttpUrl url = webServer.url("/smallorder");
+        webServer.enqueue(new MockResponse().setBody(""));
+        String[] order = new String[]{"12", "100", "10", "Albert"};
+        Windows windows = new Windows("", url.toString(), order);
+        windows.invoke();
+        RecordedRequest request = webServer.takeRequest();
+        String body = request.getBody().readUtf8();
+        assertThat(body, stringContainsInOrder(Arrays.asList("width", "9", "height", "96", "type", "plain")));
+    }
+
+    @Test
     public void testLoadingAccountAndEndpointsFromConfigurationFile() throws Exception {
         Windows windows = new Windows();
         assertThat(windows.getLargeOrderEndPoint(), equalTo("/test-largeorder"));

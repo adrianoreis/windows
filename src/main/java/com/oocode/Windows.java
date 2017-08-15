@@ -38,22 +38,24 @@ public class Windows {
     }
 
     public void invoke() throws IOException {
-        int n = Integer.parseInt(windowsOptions[2]);  // the number of windows of this size
-        int w = Integer.parseInt(windowsOptions[0]);  // the width of the window
-        int h = Integer.parseInt(windowsOptions[1]);  // the height of the window
-        String r = windowsOptions[3];                 // the model name of these windows
+        int windowWidth = Integer.parseInt(windowsOptions[0]);  // the width of the window
+        int windowHeight = Integer.parseInt(windowsOptions[1]);  // the height of the window
+        int numberOfWindows = Integer.parseInt(windowsOptions[2]);  // the number of windows of this size
+        String windowModelName = windowsOptions[3];                 // the model name of these windows
         OkHttpClient client = new OkHttpClient();
 
         // the thickness of the frame depends on the model of window
-        int width = width(r, true);
-        int height = width(r, false);
+        int width = width(windowModelName, true);
+        int height = width(windowModelName, false);
 
-        RequestBody requestBody = BodyBuilder.bodyBuilder(w, h, n, width, height, getAccount());
-        if (h > 120) requestBody = BodyBuilder.bodyBuilder2(w, h, n, width, height, getAccount());
+        RequestBody requestBody = BodyBuilder.bodyBuilder(windowWidth, windowHeight, numberOfWindows, width, height, getAccount());
+        if (windowHeight > 120) requestBody = BodyBuilder.bodyBuilder2(windowWidth, windowHeight, numberOfWindows, width, height, getAccount());
 
         // the glass pane is the size of the window minus allowance for
         // the thickness of the frame
-        if ((w-width) * (h-height) * n > 20000) {
+        int totalGlassArea = (windowWidth - width) * (windowHeight - height) * numberOfWindows;
+        if (totalGlassArea > 20000 ||
+                (windowHeight > 120 && totalGlassArea > 18000)){
             Request request = new Request.Builder()
                     .url(getLargeOrderEndPoint())
                     .method("POST", RequestBody.create(null, new byte[0]))
