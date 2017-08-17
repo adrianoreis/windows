@@ -45,15 +45,15 @@ public class Windows {
         OkHttpClient client = new OkHttpClient();
 
         // the thickness of the frame depends on the model of window
-        int width = width(windowModelName, true);
-        int height = width(windowModelName, false);
+        int widthAllowance = width(windowModelName, true);
+        int heightAllowance = width(windowModelName, false);
 
-        RequestBody requestBody = BodyBuilder.bodyBuilder(windowWidth, windowHeight, numberOfWindows, width, height, getAccount());
-        if (windowHeight > 120) requestBody = BodyBuilder.bodyBuilder2(windowWidth, windowHeight, numberOfWindows, width, height, getAccount());
+        RequestBody requestBody = BodyBuilder.bodyBuilder(windowWidth, windowHeight, numberOfWindows, widthAllowance, heightAllowance, getAccount());
+        if (windowHeight > 120) requestBody = BodyBuilder.bodyBuilder2(windowWidth, windowHeight, numberOfWindows, widthAllowance, heightAllowance, getAccount());
 
         // the glass pane is the size of the window minus allowance for
         // the thickness of the frame
-        int totalGlassArea = (windowWidth - width) * (windowHeight - height) * numberOfWindows;
+        int totalGlassArea = (windowWidth - widthAllowance) * (windowHeight - heightAllowance) * numberOfWindows;
         if (totalGlassArea > 20000 ||
                 (windowHeight > 120 && totalGlassArea > 18000)){
             Request request = new Request.Builder()
