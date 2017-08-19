@@ -62,7 +62,7 @@ public class WindowsTest {
     }
 
     @Test
-    public void testToughenedGlassAreaGt18000() throws Exception {
+    public void testToughenedGlassAndTotalGlassAreaGt18000() throws Exception {
         HttpUrl url = webServer.url("/largeorder");
         webServer.enqueue(new MockResponse().setBody(""));
         String[] order = new String[]{"15", "180", "10", "Churchill"};
@@ -75,7 +75,7 @@ public class WindowsTest {
     }
 
     @Test
-    public void testToughenedGlassNotGt18000() throws Exception {
+    public void testToughenedGlassAndTotalGlassAreaNotGt18000() throws Exception {
         HttpUrl url = webServer.url("/smallorder");
         webServer.enqueue(new MockResponse().setBody(""));
         String[] order = new String[]{"12", "183", "10", "Victoria"};
@@ -87,7 +87,7 @@ public class WindowsTest {
     }
 
     @Test
-    public void testPlainGlassNotGt20000() throws Exception {
+    public void testPlainGlassAndTotalGlassAreaNotGt20000() throws Exception {
         HttpUrl url = webServer.url("/smallorder");
         webServer.enqueue(new MockResponse().setBody(""));
         String[] order = new String[]{"12", "100", "10", "Albert"};
