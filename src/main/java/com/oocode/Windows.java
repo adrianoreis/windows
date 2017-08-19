@@ -6,7 +6,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.util.Properties;
 
-import static com.oocode.Main.*;
+import static com.oocode.Main.width;
 
 public class Windows {
     private String[] windowsOptions;
@@ -15,14 +15,8 @@ public class Windows {
     private String smallOrderEndPoint;
     private String account;
 
-    public Windows(String largeOrderEndPoint, String smallOrderEndPoint, String ...windowsOptions) {
+    public Windows(String largeOrderEndPoint, String smallOrderEndPoint, String... windowsOptions) {
         initConfigurations("", largeOrderEndPoint, smallOrderEndPoint, windowsOptions);
-    }
-    private void initConfigurations(String account, String largeOrderEndPoint, String smallOrderEndPoint, String ...windowsOptions) {
-        this.windowsOptions = windowsOptions;
-        this.account = account;
-        this.largeOrderEndPoint = largeOrderEndPoint;
-        this.smallOrderEndPoint = smallOrderEndPoint;
     }
 
     public Windows(String... args) throws IOException {
@@ -37,6 +31,13 @@ public class Windows {
         }
     }
 
+    private void initConfigurations(String account, String largeOrderEndPoint, String smallOrderEndPoint, String... windowsOptions) {
+        this.windowsOptions = windowsOptions;
+        this.account = account;
+        this.largeOrderEndPoint = largeOrderEndPoint;
+        this.smallOrderEndPoint = smallOrderEndPoint;
+    }
+
     public void invoke() throws IOException {
         int windowWidth = Integer.parseInt(windowsOptions[0]);  // the width of the window
         int windowHeight = Integer.parseInt(windowsOptions[1]);  // the height of the window
@@ -49,26 +50,27 @@ public class Windows {
         int heightAllowance = width(windowModelName, false);
 
         RequestBody requestBody = BodyBuilder.bodyBuilder(windowWidth, windowHeight, numberOfWindows, widthAllowance, heightAllowance, getAccount());
-        if (windowHeight > 120) requestBody = BodyBuilder.bodyBuilder2(windowWidth, windowHeight, numberOfWindows, widthAllowance, heightAllowance, getAccount());
+        if (windowHeight > 120)
+            requestBody = BodyBuilder.bodyBuilder2(windowWidth, windowHeight, numberOfWindows, widthAllowance, heightAllowance, getAccount());
 
         // the glass pane is the size of the window minus allowance for
         // the thickness of the frame
         int totalGlassArea = (windowWidth - widthAllowance) * (windowHeight - heightAllowance) * numberOfWindows;
         if (totalGlassArea > 20000 ||
-                (windowHeight > 120 && totalGlassArea > 18000)){
+                (windowHeight > 120 && totalGlassArea > 18000)) {
             Request request = new Request.Builder()
                     .url(getLargeOrderEndPoint())
                     .method("POST", RequestBody.create(null, new byte[0]))
                     .post(requestBody)
                     .build();
 
-        try (Response response = client.newCall(request).execute()) {
-            try (ResponseBody body = response.body()) {
-                assert body != null;
-                serverMessage=body.string();
+            try (Response response = client.newCall(request).execute()) {
+                try (ResponseBody body = response.body()) {
+                    assert body != null;
+                    serverMessage = body.string();
+                }
             }
-        }
-        return;
+            return;
         }
 
         Request request = new Request.Builder()
@@ -79,7 +81,8 @@ public class Windows {
 
         try (Response response = client.newCall(request).execute()) {
             try (ResponseBody body = response.body()) {
-                assert body != null; serverMessage=body.string();
+                assert body != null;
+                serverMessage = body.string();
             }
         }
     }
@@ -92,11 +95,11 @@ public class Windows {
         return largeOrderEndPoint;
     }
 
-    public String getServerMessage() {
+    protected String getServerMessage() {
         return serverMessage;
     }
 
-    public String getAccount(){
+    protected String getAccount() {
         return account;
     }
 }
