@@ -53,15 +53,17 @@ public class Windows {
         if (windowHeight > 120)
             requestBody = BodyBuilder.bodyBuilder2(windowWidth, windowHeight, numberOfWindows, widthAllowance, heightAllowance, getAccount());
 
+        String endpoint;
         // the glass pane is the size of the window minus allowance for
         // the thickness of the frame
         int totalGlassArea = (windowWidth - widthAllowance) * (windowHeight - heightAllowance) * numberOfWindows;
         if (totalGlassArea > 20000 ||
                 (windowHeight > 120 && totalGlassArea > 18000)) {
-            placeOrder(client, requestBody, getLargeOrderEndPoint());
-            return;
+            endpoint = getLargeOrderEndPoint();
+        } else {
+            endpoint = getSmallOrderEndPoint();
         }
-        placeOrder(client, requestBody, getSmallOrderEndPoint());
+        placeOrder(client, requestBody, endpoint);
     }
 
     private void placeOrder(OkHttpClient client, RequestBody requestBody, String endPoint) throws IOException {
