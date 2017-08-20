@@ -58,23 +58,15 @@ public class Windows {
         int totalGlassArea = (windowWidth - widthAllowance) * (windowHeight - heightAllowance) * numberOfWindows;
         if (totalGlassArea > 20000 ||
                 (windowHeight > 120 && totalGlassArea > 18000)) {
-            Request request = new Request.Builder()
-                    .url(getLargeOrderEndPoint())
-                    .method("POST", RequestBody.create(null, new byte[0]))
-                    .post(requestBody)
-                    .build();
-
-            try (Response response = client.newCall(request).execute()) {
-                try (ResponseBody body = response.body()) {
-                    assert body != null;
-                    serverMessage = body.string();
-                }
-            }
+            placeOrder(client, requestBody, getLargeOrderEndPoint());
             return;
         }
+        placeOrder(client, requestBody, getSmallOrderEndPoint());
+    }
 
+    private void placeOrder(OkHttpClient client, RequestBody requestBody, String endPoint) throws IOException {
         Request request = new Request.Builder()
-                .url(getSmallOrderEndPoint())
+                .url(endPoint)
                 .method("POST", RequestBody.create(null, new byte[0]))
                 .post(requestBody)
                 .build();
