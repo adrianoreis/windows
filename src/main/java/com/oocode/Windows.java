@@ -81,19 +81,19 @@ public class Windows {
         }
     }
 
-    protected String getSmallOrderEndPoint() {
+    String getSmallOrderEndPoint() {
         return smallOrderEndPoint;
     }
 
-    protected String getLargeOrderEndPoint() {
+    String getLargeOrderEndPoint() {
         return largeOrderEndPoint;
     }
 
-    protected String getServerMessage() {
+    String getServerMessage() {
         return serverMessage;
     }
 
-    protected String getAccount() {
+    String getAccount() {
         return account;
     }
 }
