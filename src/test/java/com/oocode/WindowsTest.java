@@ -57,8 +57,7 @@ public class WindowsTest {
         windows.invoke();
         RecordedRequest request = webServer.takeRequest();
         String body = request.getBody().readUtf8();
-        assertThat(body, stringContainsInOrder(Arrays.asList("width", "96", "height", "117", "type", "plain")));
-        //123-4 * 456-3
+        assertThat(body, stringContainsInOrder(Arrays.asList("width", "96", "height", "117", "type", "toughened")));
     }
 
     @Test
@@ -95,7 +94,7 @@ public class WindowsTest {
         windows.invoke();
         RecordedRequest request = webServer.takeRequest();
         String body = request.getBody().readUtf8();
-        assertThat(body, stringContainsInOrder(Arrays.asList("width", "9", "height", "96", "type", "plain")));
+        assertThat(body, stringContainsInOrder(Arrays.asList("width", "9", "height", "96", "type", "toughened")));
     }
 
     @Test
@@ -104,6 +103,28 @@ public class WindowsTest {
         assertThat(windows.getLargeOrderEndPoint(), equalTo("/test-largeorder"));
         assertThat(windows.getSmallOrderEndPoint(), equalTo("/test-smallorder"));
         assertThat(windows.getAccount(), equalTo("unittest"));
+    }
+
+    @Test
+    public void testMustBeToughenedGlassWhenAreaGt3000() throws Exception {
+        HttpUrl url = webServer.url("/order");
+        webServer.enqueue(new MockResponse().setBody(""));
+        String[] order = new String[] {"33","110","1", "Albert"};
+        new Windows("", url.toString(), order).invoke();
+        RecordedRequest recordedRequest = webServer.takeRequest();
+        String body = recordedRequest.getBody().readUtf8();
+        assertThat(body, stringContainsInOrder(Arrays.asList("type", "toughened")));
+    }
+
+    @Test
+    public void testMustBeToughenedGlassWhenHeightGt120() throws Exception {
+        HttpUrl url = webServer.url("/order");
+        webServer.enqueue(new MockResponse().setBody(""));
+        String[] order = new String[] {"1","121","1", "Albert"};
+        new Windows("", url.toString(), order).invoke();
+        RecordedRequest recordedRequest = webServer.takeRequest();
+        String body = recordedRequest.getBody().readUtf8();
+        assertThat(body, stringContainsInOrder(Arrays.asList("type", "toughened")));
     }
 
     @After
