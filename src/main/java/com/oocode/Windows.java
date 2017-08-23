@@ -44,7 +44,7 @@ public class Windows {
         // the thickness of the frame depends on the model of window
         // the glass pane is the size of the window minus allowance for
         // the thickness of the frame
-        int totalGlassArea = (Integer.parseInt(windowsOptions[0]) - width(windowsOptions[3], true)) * (Integer.parseInt(windowsOptions[1]) - width(windowsOptions[3], false)) * Integer.parseInt(windowsOptions[2]);
+        int totalGlassArea = getTotalGlassArea();
 
         RequestBody requestBody = BodyBuilder.bodyBuilder(Integer.parseInt(windowsOptions[0]), Integer.parseInt(windowsOptions[1]), Integer.parseInt(windowsOptions[2]), width(windowsOptions[3], true), width(windowsOptions[3], false), getAccount());
         if (Integer.parseInt(windowsOptions[1]) > 120 || totalGlassArea > 3000) {
@@ -59,6 +59,10 @@ public class Windows {
             endpoint = getSmallOrderEndPoint();
         }
         placeOrder(client, requestBody, endpoint);
+    }
+
+    private int getTotalGlassArea() {
+        return (Integer.parseInt(windowsOptions[0]) - width(windowsOptions[3], true)) * (Integer.parseInt(windowsOptions[1]) - width(windowsOptions[3], false)) * Integer.parseInt(windowsOptions[2]);
     }
 
     private void placeOrder(OkHttpClient client, RequestBody requestBody, String endPoint) throws IOException {
