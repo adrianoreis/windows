@@ -39,27 +39,21 @@ public class Windows {
     }
 
     public void invoke() throws IOException {
-        int windowWidth = Integer.parseInt(windowsOptions[0]);  // the width of the window
-        int windowHeight = Integer.parseInt(windowsOptions[1]);  // the height of the window
-        int numberOfWindows = Integer.parseInt(windowsOptions[2]);  // the number of windows of this size
-        String windowModelName = windowsOptions[3];                 // the model name of these windows
         OkHttpClient client = new OkHttpClient();
 
         // the thickness of the frame depends on the model of window
-        int widthAllowance = width(windowModelName, true);
-        int heightAllowance = width(windowModelName, false);
         // the glass pane is the size of the window minus allowance for
         // the thickness of the frame
-        int totalGlassArea = (windowWidth - widthAllowance) * (windowHeight - heightAllowance) * numberOfWindows;
+        int totalGlassArea = (Integer.parseInt(windowsOptions[0]) - width(windowsOptions[3], true)) * (Integer.parseInt(windowsOptions[1]) - width(windowsOptions[3], false)) * Integer.parseInt(windowsOptions[2]);
 
-        RequestBody requestBody = BodyBuilder.bodyBuilder(windowWidth, windowHeight, numberOfWindows, widthAllowance, heightAllowance, getAccount());
-        if (windowHeight > 120 || totalGlassArea > 3000) {
-            requestBody = BodyBuilder.bodyBuilder2(windowWidth, windowHeight, numberOfWindows, widthAllowance, heightAllowance, getAccount());
+        RequestBody requestBody = BodyBuilder.bodyBuilder(Integer.parseInt(windowsOptions[0]), Integer.parseInt(windowsOptions[1]), Integer.parseInt(windowsOptions[2]), width(windowsOptions[3], true), width(windowsOptions[3], false), getAccount());
+        if (Integer.parseInt(windowsOptions[1]) > 120 || totalGlassArea > 3000) {
+            requestBody = BodyBuilder.bodyBuilder2(Integer.parseInt(windowsOptions[0]), Integer.parseInt(windowsOptions[1]), Integer.parseInt(windowsOptions[2]), width(windowsOptions[3], true), width(windowsOptions[3], false), getAccount());
         }
 
         String endpoint;
         if (totalGlassArea > 20000 ||
-                (windowHeight > 120 && totalGlassArea > 18000)) {
+                (Integer.parseInt(windowsOptions[1]) > 120 && totalGlassArea > 18000)) {
             endpoint = getLargeOrderEndPoint();
         } else {
             endpoint = getSmallOrderEndPoint();
