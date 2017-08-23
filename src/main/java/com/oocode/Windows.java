@@ -44,16 +44,15 @@ public class Windows {
         // the thickness of the frame depends on the model of window
         // the glass pane is the size of the window minus allowance for
         // the thickness of the frame
-        int totalGlassArea = getTotalGlassArea();
 
         RequestBody requestBody = BodyBuilder.bodyBuilder(Integer.parseInt(windowsOptions[0]), Integer.parseInt(windowsOptions[1]), Integer.parseInt(windowsOptions[2]), width(windowsOptions[3], true), width(windowsOptions[3], false), getAccount());
-        if (Integer.parseInt(windowsOptions[1]) > 120 || totalGlassArea > 3000) {
+        if (Integer.parseInt(windowsOptions[1]) > 120 || getTotalGlassArea() > 3000) {
             requestBody = BodyBuilder.bodyBuilder2(Integer.parseInt(windowsOptions[0]), Integer.parseInt(windowsOptions[1]), Integer.parseInt(windowsOptions[2]), width(windowsOptions[3], true), width(windowsOptions[3], false), getAccount());
         }
 
         String endpoint;
-        if (totalGlassArea > 20000 ||
-                (Integer.parseInt(windowsOptions[1]) > 120 && totalGlassArea > 18000)) {
+        if (getTotalGlassArea() > 20000 ||
+                (Integer.parseInt(windowsOptions[1]) > 120 && getTotalGlassArea() > 18000)) {
             endpoint = getLargeOrderEndPoint();
         } else {
             endpoint = getSmallOrderEndPoint();
