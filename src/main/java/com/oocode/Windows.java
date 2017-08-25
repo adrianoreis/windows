@@ -5,6 +5,7 @@ import okhttp3.*;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.Properties;
+import java.util.concurrent.TimeUnit;
 
 import static com.oocode.Main.width;
 
@@ -50,7 +51,6 @@ public class Windows {
     }
 
     public void invoke() throws IOException {
-        OkHttpClient client = new OkHttpClient();
         RequestBody requestBody = getRequestBody();
         String endpoint;
 
@@ -61,7 +61,11 @@ public class Windows {
             endpoint = getSmallOrderEndPoint();
         }
 
-        placeOrder(client, requestBody, endpoint);
+        placeOrder(getOkHttpClient(), requestBody, endpoint);
+    }
+
+    protected OkHttpClient getOkHttpClient() {
+        return new OkHttpClient.Builder().connectTimeout(25, TimeUnit.SECONDS).readTimeout(25, TimeUnit.SECONDS).writeTimeout(25, TimeUnit.SECONDS).build();
     }
 
     protected RequestBody getRequestBody() {
