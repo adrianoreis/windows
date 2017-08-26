@@ -7,8 +7,6 @@ import java.io.InputStream;
 import java.util.Properties;
 import java.util.concurrent.TimeUnit;
 
-import static com.oocode.Main.width;
-
 public class Windows {
     private String[] options;
     private String serverMessage;
@@ -69,23 +67,24 @@ public class Windows {
     }
 
     protected RequestBody getRequestBody() {
+        String glassType;
         if (Integer.parseInt(options[1]) > 120 || getTotalGlassArea() > 3000) {
-            return BodyBuilder.bodyBuilder(Integer.parseInt(options[0]), Integer.parseInt(options[1]),
-                    Integer.parseInt(options[2]), width(options[3], true), width(options[3], false), account, "toughened");
+            glassType = "toughened";
         } else {
-            return BodyBuilder.bodyBuilder(Integer.parseInt(options[0]), Integer.parseInt(options[1]),
-                    Integer.parseInt(options[2]), width(options[3], true), width(options[3], false), account, "plain");
+            glassType = "plain";
         }
+        return BodyBuilder.bodyBuilder(Integer.parseInt(options[0]), Integer.parseInt(options[1]),
+                Integer.parseInt(options[2]), width(options[3]), height(options[3]), account, glassType);
     }
 
     /**
-     * the thickness of the frame depends on the model of window
-     * the glass pane is the size of the window minus allowance for
+     * The thickness of the frame depends on the model of window.
+     * The glass pane is the size of the window minus allowance for
      * the thickness of the frame
      * @return glass area to be ordered
      */
     private int getTotalGlassArea() {
-        return (Integer.parseInt(options[0]) - width(options[3], true)) * (Integer.parseInt(options[1]) - width(options[3], false)) * Integer.parseInt(options[2]);
+        return (Integer.parseInt(options[0]) - width(options[3])) * (Integer.parseInt(options[1]) - height(options[3])) * Integer.parseInt(options[2]);
     }
 
     private void placeOrder(OkHttpClient client, RequestBody requestBody, String endPoint) throws IOException {
@@ -101,6 +100,30 @@ public class Windows {
                 serverMessage = body.string();
             }
         }
+    }
+
+    protected static int width(String r) {
+        if (r.equals("Churchill")) {
+            return 4;
+        }
+        if (r.equals("Victoria")) {
+            return 2;
+        }
+        if (r.equals("Albert")) {
+            return 3;
+        }
+        throw new UnsupportedOperationException(r); // model name isn't known
+    }
+
+    protected static int height(String r) {
+        if (r.equals("Churchill")) return 3;
+        if (r.equals("Victoria")) {
+            return 3;
+        }
+        if (r.equals("Albert")) {
+            return 4;
+        }
+        throw new UnsupportedOperationException(r); // model name isn't known
     }
 
     String getSmallOrderEndPoint() {
