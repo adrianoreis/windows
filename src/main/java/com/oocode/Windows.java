@@ -10,7 +10,7 @@ import java.util.concurrent.TimeUnit;
 import static com.oocode.Main.width;
 
 public class Windows {
-    private String[] windowsOptions;
+    private String[] options;
     private String serverMessage;
     private String largeOrderEndPoint;
     private String smallOrderEndPoint;
@@ -44,7 +44,7 @@ public class Windows {
     }
 
     private void initConfigurations(String account, String largeOrderEndPoint, String smallOrderEndPoint, String... windowsOptions) {
-        this.windowsOptions = windowsOptions;
+        this.options = windowsOptions;
         this.account = account;
         this.largeOrderEndPoint = largeOrderEndPoint;
         this.smallOrderEndPoint = smallOrderEndPoint;
@@ -55,7 +55,7 @@ public class Windows {
         String endpoint;
 
         if (getTotalGlassArea() > 20000 ||
-                (Integer.parseInt(windowsOptions[1]) > 120 && getTotalGlassArea() > 18000)) {
+                (Integer.parseInt(options[1]) > 120 && getTotalGlassArea() > 18000)) {
             endpoint = getLargeOrderEndPoint();
         } else {
             endpoint = getSmallOrderEndPoint();
@@ -69,11 +69,13 @@ public class Windows {
     }
 
     protected RequestBody getRequestBody() {
-        RequestBody requestBody = BodyBuilder.bodyBuilder(Integer.parseInt(windowsOptions[0]), Integer.parseInt(windowsOptions[1]), Integer.parseInt(windowsOptions[2]), width(windowsOptions[3], true), width(windowsOptions[3], false), getAccount());
-        if (Integer.parseInt(windowsOptions[1]) > 120 || getTotalGlassArea() > 3000) {
-            requestBody = BodyBuilder.bodyBuilder2(Integer.parseInt(windowsOptions[0]), Integer.parseInt(windowsOptions[1]), Integer.parseInt(windowsOptions[2]), width(windowsOptions[3], true), width(windowsOptions[3], false), getAccount());
+        if (Integer.parseInt(options[1]) > 120 || getTotalGlassArea() > 3000) {
+            return BodyBuilder.bodyBuilder(Integer.parseInt(options[0]), Integer.parseInt(options[1]),
+                    Integer.parseInt(options[2]), width(options[3], true), width(options[3], false), account, "toughened");
+        } else {
+            return BodyBuilder.bodyBuilder(Integer.parseInt(options[0]), Integer.parseInt(options[1]),
+                    Integer.parseInt(options[2]), width(options[3], true), width(options[3], false), account, "plain");
         }
-        return requestBody;
     }
 
     /**
@@ -83,7 +85,7 @@ public class Windows {
      * @return glass area to be ordered
      */
     private int getTotalGlassArea() {
-        return (Integer.parseInt(windowsOptions[0]) - width(windowsOptions[3], true)) * (Integer.parseInt(windowsOptions[1]) - width(windowsOptions[3], false)) * Integer.parseInt(windowsOptions[2]);
+        return (Integer.parseInt(options[0]) - width(options[3], true)) * (Integer.parseInt(options[1]) - width(options[3], false)) * Integer.parseInt(options[2]);
     }
 
     private void placeOrder(OkHttpClient client, RequestBody requestBody, String endPoint) throws IOException {
