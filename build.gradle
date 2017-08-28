@@ -1,7 +1,10 @@
 apply plugin: 'java'
 apply plugin: "jacoco"
+apply plugin: "application"
 
-version = '1.0.0'
+mainClassName = "com.oocode.Main"
+
+version = "1.1.0"
 
 description = """windows extreme programming"""
 
