@@ -127,6 +127,14 @@ public class WindowsTest {
         assertThat(body, stringContainsInOrder(Arrays.asList("type", "toughened")));
     }
 
+    @Test(expected = UnsupportedOperationException.class)
+    public void testInvalidModelName() throws Exception {
+        HttpUrl url = webServer.url("/order");
+        webServer.enqueue(new MockResponse().setBody(""));
+        String[] order = new String[] {"1","121","1", "Alberto"};
+        new Windows("", url.toString(), order).invoke();
+    }
+
     @After
     public void tearDown() throws Exception {
         webServer.shutdown();
